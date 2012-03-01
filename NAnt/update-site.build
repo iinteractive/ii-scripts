@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project name="Update-Site" default="sync-files">
+<!--
+	Properties:
+		Site-Path -
+			The UNC path to the web site folder.
+		Release-Path -
+			This is the local path to the artifact to deploy
+		NAnt-Contrib -
+			The place where NAnt.Contrib.Tasks.dll resides.
+		AppPool -
+			This specifies the iis application pool that you wish to restart.
+		Server -
+			This specified the server where the app pool is that you wish 
+			to restart.
+		Media-Path -
+			The UNC path to the media folder.
+-->
+
+	<target name="initialize">
+		<loadtasks assembly="${NAnt-Contrib}bin/NAnt.Contrib.Tasks.dll" />
+	</target>
+	
+	<target name="compare-bin">
+		<uptodate property="bin-uptodate">
+			<sourcefiles basedir="${Release-Path}">
+				<include name="bin\**\*" />
+			</sourcefiles>
+			<targetfiles basedir="${Site-Path}">
+				<include name="bin\**\*" />
+			</targetfiles>
+		</uptodate>
+	</target>
+
+	<target name="create-folder" depends="initialize">	
+		<mkdir dir="${Site-Path}" unless="${file::exists(Site-Path)}" />
+	</target>
+
+	<target name="sync-files" depends="create-folder, initialize">
+		<copy todir="${Site-Path}">		
+			<fileset basedir="${Release-Path}">
+				<include name="**\*" />
+				<exclude name="**\*.cs" />
+				<exclude name="**\*.scc" />
+				<exclude name="**\*.*proj" />
+				<exclude name="**\*.user" />
+				<exclude name="**\*.vspscc" />
+				<exclude name="**\obj" />
+				<exclude name="**\obj\**" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="restart">		
+		<iisapppool action="Recycle" pool="${AppPool}" server="${Server}" verbose="true" />
+	</target>
+	
+	<target name="update" depends="compare-bin, sync-files, initialize">
+		<!--call target="restart" if="${not bin-uptodate}" /-->
+	</target>
+	
+</project>

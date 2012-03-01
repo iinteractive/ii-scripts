@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project name="Version" default="update">
+<!--
+	Properties:
+		File-Path -
+			The path to the xml file.
+		Component-Name -
+			Name of the component.
+		Major-Version -
+			Major version of the component
+		Minor-Version -
+			Minor version of the component
+		Hot-Patch -
+			Hot patch of the component
+		Build-Number -
+			Build number of the component
+		
+-->
+	<target name="update">
+		<loadfile file="template.ver" property="version-file">
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${Major-Version}.${Minor-Version}.${Hot-Patch}.${Build-Number}" />
+					
+					<token key="COMPONENTNAME" value="${Component-Name}" />
+				</replacetokens>
+			</filterchain>
+		</loadfile>
+
+		<delete if="${file::exists(File-Path)}" file="${File-Path}" />
+		
+		<echo file="${File-Path}" message="${version-file}" />
+	</target>	
+</project>
