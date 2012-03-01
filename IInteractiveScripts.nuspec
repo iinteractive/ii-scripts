@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <version>1.0.0</version>
+    <authors>Sean Sparkman</authors>
+    <owners />
+    <id>IInteractiveScripts</id>
+    <title />
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is the IInteractive Build Scripts.</description>
+    <copyright />
+  </metadata>
+  <files>
+    <file src="NAnt\component-version.build" target="content\component-version.build" />
+    <file src="NAnt\template.ver" target="content\template.ver" />
+    <file src="NAnt\update-site.build" target="content\update-site.build" />
+  </files>
+</package>
